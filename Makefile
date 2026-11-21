@@ -86,7 +86,7 @@ errors: ## Muestra errores de importación de DAGs
 	@$(AIRFLOW) dags list-import-errors 2>/dev/null
 
 test: ## Corre los tests del DAG dentro del contenedor
-	@docker compose exec -T -w /opt/airflow airflow-scheduler python -m pytest -q tests
+	@docker compose exec -T -w /opt/airflow airflow-scheduler python -m pytest -q -p no:cacheprovider tests
 
 logs: ## Sigue los logs del scheduler
 	@docker compose logs -f --tail 50 airflow-scheduler

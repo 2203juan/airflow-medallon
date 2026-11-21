@@ -8,6 +8,30 @@ Orquestación con Apache Airflow 3.3.2 del pipeline Medallion de mi laboratorio
 Basado en el tutorial de Juan Manuel Núñez Velasco en Medium. El tutorial está escrito
 para Windows con WSL2; este proyecto corre en macOS con Docker Desktop.
 
+## Evidencias
+
+### Ejecución del DAG
+
+Las cinco tareas terminaron en `success` en el primer intento (Try Number 1). La ejecución
+completa tomó 9 s; la tarea más lenta es `entrenar_modelo` (4,2 s), que entrena los dos
+modelos. La grilla de la izquierda muestra las ejecuciones anteriores, todas en verde.
+
+![Ejecución del DAG](docs/img/airflow_run.png)
+
+### DAG registrado en Airflow
+
+`medallon_etl_drybean` aparece con sus etiquetas y sin programación (`schedule=None`):
+solo corre cuando se dispara a mano o con `make run`.
+
+![Lista de DAGs](docs/img/airflow_dags.png)
+
+### Estado de Airflow
+
+MetaDatabase, Scheduler, Triggerer y Dag Processor aparecen en verde, y el historial de
+las últimas 24 horas registra 5 ejecuciones exitosas y ninguna fallida.
+
+![Inicio de Airflow](docs/img/airflow_home.png)
+
 ## Cómo funciona
 
 ```
@@ -59,7 +83,7 @@ make help     # todos los comandos
 
 Interfaz web: http://localhost:8081, usuario `airflow`, contraseña `airflow`.
 
-`make run` muestra algo así:
+`make run` muestra el estado de cada tarea (recorté las columnas `dag_id` y de fechas):
 
 ```
 → Ejecutando medallon_etl_drybean  (run: manual__2026-11-21T19:54:17...)
@@ -115,5 +139,3 @@ los mismos tests.
 - **`AIRFLOW_UID` con `id -u`** en vez de 50000: en macOS y Linux los archivos de `logs/`
   y `data/` quedan con tu usuario.
 - **`LOAD_EXAMPLES` en `false`**, para que la interfaz muestre solo este DAG.
-- **Los tests usan `airflow.dag_processing.dagbag.DagBag`**: en Airflow 3.3 `DagBag` ya no
-  acepta `include_examples`.

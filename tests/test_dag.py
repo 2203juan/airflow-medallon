@@ -14,13 +14,13 @@ def test_sin_errores_de_importacion():
 
 
 def test_dag_existe_y_es_manual():
-    dag = get_dagbag().get_dag("medallon_etl_drybean")
+    dag = get_dagbag().dags["medallon_etl_drybean"]
     assert dag is not None
     assert dag.schedule is None
 
 
 def test_orden_de_las_tareas():
-    dag = get_dagbag().get_dag("medallon_etl_drybean")
+    dag = get_dagbag().dags["medallon_etl_drybean"]
     orden = [
         "validar_bronze",
         "transformar_a_silver",

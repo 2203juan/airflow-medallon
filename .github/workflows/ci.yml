@@ -24,4 +24,4 @@ jobs:
       - name: Tests del DAG
         run: |
           docker run --rm -v "$PWD:/opt/airflow/project" -w /opt/airflow/project \
-            airflow-medallon:ci python -m pytest -q tests
+            airflow-medallon:ci python -m pytest -q -p no:cacheprovider tests
