@@ -1,0 +1,27 @@
+name: CI - Airflow Medallion
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validar-dag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Validar docker-compose
+        run: |
+          printf "AIRFLOW_UID=50000\nFERNET_KEY=\n" > .env
+          docker compose config -q
+
+      - name: Construir imagen de Airflow
+        run: docker build -t airflow-medallon:ci .
+
+      - name: Tests del DAG
+        run: |
+          docker run --rm -v "$PWD:/opt/airflow/project" -w /opt/airflow/project \
+            airflow-medallon:ci python -m pytest -q tests
